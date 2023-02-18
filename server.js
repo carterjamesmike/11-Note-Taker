@@ -1,18 +1,18 @@
 const express = require('express');
 const path = require('path');
-const fs = require('fs');
-const uuid = require('./helpers/uuid');
-const { readAndAppend, readFromFile } = require('./helpers/fsUtils');
+const api = require('./routes/index');
+//const fs = require('fs');
+//const uuid = require('./helpers/uuid');
+//const { readAndAppend, readFromFile } = require('./helpers/fsUtils');
 
 const PORT = process.env.PORT || 3001;
-
 const app = express();
 
-const { notes } = require('./db/db.json');
+//const { notes } = require('./db/db.json');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-//app.use('/api', api)
+app.use('/api', api)
 
 app.use(express.static('public'));
 
@@ -27,16 +27,16 @@ function createNewNote(body, notesArray) {
     return note;
 }
 
-//API Routes
+//Routes
 //GET homepage
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
-//GET /api/notes
-app.get('/notes', (req, res) => 
-    readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)))
-);
+//GET Notes
+app.get('/notes', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/notes.html'));
+});
 
 //POST /api/notes
 app.post('/api/notes', (req, res) => {
